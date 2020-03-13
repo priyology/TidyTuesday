@@ -103,14 +103,6 @@ print(CategoryEnrollment.Plot)
 dev.off()
 
 
-
-
-
-
-
-
-
-
 #### other random code from playing around: breakdown of data by women ==== 
 
 #### % women enrolled in institutions

@@ -55,6 +55,3 @@ p2 <- ggplot(highprice, aes(x = dates, y = name, color = name, size = price)) +
   scale_x_date(date_breaks = "6 months", date_labels =  "%b %Y") 
 
 FinalPlots <- p1 + p2
-
-ggsave("fig_output/GDPR_21Apr2020_.png")
-  

@@ -48,7 +48,7 @@ p2 <- ggplot(Oceania.Volcanoes, aes(x = major_rock_1, y = elevation, color = ele
   labs(x = 'Rock Type', y = 'Elevation') + ggtitle('Rock Type in Oceania Correlates with Elevation') +
   theme_classic() +
   theme_ft_rc() +
-  theme(plot.title = element_text(hjust = 0.5),
+  theme(plot.title = element_text(hjust = 0.5), 
         axis.text.x = element_text(angle = 90, vjust = 0.8))
 
 p2

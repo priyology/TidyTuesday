@@ -26,7 +26,7 @@ View(Oceania.Volcanoes)
 #latlong for Oceania
 LatLong <- c(lon = 140.0188, lat = -22.7359)
 
-#register_google(key = "AIzaSyDFrgkgP4nl2JXFcaz5KeMJDX4ZqbZgK6A")
+register_google(key = "XXXXX")
 
 #design the map
 VolcanoMap <- get_map(location = LatLong, source = "google", maptype = "satellite", crop = FALSE, zoom = 3)

@@ -1,7 +1,7 @@
 # load libraries
 library(tidyverse)
-library(hrbrthemes)
-library(ggalt)
+library(hrbrthemes) # to make pretty
+library(ggalt) # for dumbbell plot
 
 # Get the Data
 vb_matches <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-05-19/vb_matches.csv', guess_max = 76000)
@@ -49,7 +49,8 @@ Volleyball2.W <- Volleyball2 %>%
   filter(Win_Lose == "W_HomeC") %>% 
   summarise(Win_both = sum(HomeCountry == 1),
             Win_one = sum(HomeCountry == 0),
-            Win_none = sum(HomeCountry == -1))
+            Win_none = (sum(HomeCountry == -1)* -1))
+  
 
 Volleyball2.W
 
@@ -57,19 +58,20 @@ Volleyball2.W
 
 #DumbellPlot, package = ggalt
 
-ggplot(Volleyball2.W, aes(y = country, x = Win_both, xend = Win_none)) + 
-  geom_dumbbell(size=3, color="#e3e2e1", 
-                colour_x = "tomato", colour_xend = "blue",
-                dot_guide=TRUE, dot_guide_size=0.25) +
-  labs(x=NULL, y=NULL, title="Wins: Red = Both in Country, Blue = None in Country") +
-  theme_minimal()
+Vplot <- ggplot(Volleyball2.W, aes(y = country, x = Win_both, xend = Win_none)) + 
+  geom_dumbbell(size = 2.5, color="#ffffc4", 
+                colour_x = "#79eef8", colour_xend = "#f88379",
+                dot_guide = TRUE, dot_guide_size = 0.25) +
+  #geom_vline(xintercept = 0, color = "white", size = 2) +
+  annotate ("text", x = -4000, y = "Liechtenstein", label = "Foreign Country Wins", fontface = "bold", color = "#f88379") +
+  annotate ("text", x = 3300, y = "Liechtenstein", label = "Wins in Home Country", fontface = "bold", color = "#79eef8") +
+  labs(x = "# of matches", y = NULL, title ="Is the a Home Court Advantage in Volleyball?", subtitle = "How many matches did a team win in their own country vs. a foreign country?", caption = "Figure by @priyology") +
+  theme_classic() +
+  theme_ft_rc()
 
-ggplot(Volleyball2.L, aes(y = country, x = Lose_both, xend = Lose_none)) + 
-  geom_dumbbell(size=3, color="#e3e2e1", 
-                colour_x = "tomato", colour_xend = "blue",
-                dot_guide=TRUE, dot_guide_size=0.25) +
-  labs(x=NULL, y=NULL, title="Losses: Red = Both in Country, Blue = None in Country") +
-  theme_minimal()
+Vplot
+
+ggsave("fig_output/VolleyBall_19May2020.png")
 
 
 #X is -1 thru +1, vertical line that goes through 0 & countries are all the way going down, postivie/negative size of the dots are on either side of a vertical line 
@@ -77,6 +79,13 @@ ggplot(Volleyball2.L, aes(y = country, x = Lose_both, xend = Lose_none)) +
 
 ## Other Code!
 
+
+Volleyball2.L <- Volleyball2 %>% 
+  group_by(country, Win_Lose) %>% 
+  filter(Win_Lose == "L_HomeC") %>%
+  summarise(Lose_both = sum(HomeCountry == 1),
+            Lose_one = sum(HomeCountry == 0),
+            Lose_none = sum(HomeCountry == -1))
 
 
 Volleyball3 <- Volleyball2 %>% 
@@ -95,4 +104,9 @@ ggplot(Volleyball3, aes(x = Win_Val, y = country, color = Win_Lose)) +
   facet_wrap(.~ gender) +
   theme_classic()
 
-table(Volleyball$country)
+ggplot(Volleyball2.L, aes(y = country, x = Lose_both, xend = Lose_none)) + 
+  geom_dumbbell(size=3, color="#e3e2e1", 
+                colour_x = "tomato", colour_xend = "blue",
+                dot_guide=TRUE, dot_guide_size=0.25) +
+  labs(x=NULL, y=NULL, title="Losses: Red = Both in Country, Blue = None in Country") +
+  theme_minimal()
